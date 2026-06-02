@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<!-- v2.6.0-clear-labels-and-interstitials -->
+<!-- v2.7.0-fix-overflow-and-product-code -->
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Galería de Productos Editable</title>
@@ -12,30 +12,53 @@
   * { box-sizing: border-box; margin:0; padding:0; }
   body { font-family: 'Manrope', sans-serif; background: linear-gradient(180deg, #fff0f5, #ffe4ec); color: var(--ink); }
   .wrap { width: min(95%, 1420px); margin: 0 auto; padding: 0 8px; }
+  
   header { position: sticky; top: 0; background: rgba(255,240,245,0.95); backdrop-filter: blur(12px); z-index: 100; border-bottom: 1px solid #f8d7e6; }
   .topbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; flex-wrap: wrap; gap: 12px; }
   .brand { display: flex; align-items: center; gap: 12px; font-size: 1.7rem; font-weight: 700; }
   .brand-mark { width: 52px; height: 52px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 14px; flex-shrink: 0; }
+  
   .btn { padding: 10px 22px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; white-space: nowrap; }
   .btn-primary { background: var(--ink); color: white; }
   .btn-secondary { background: white; border: 1px solid #ddd; }
   .btn-accent { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; }
   .btn-danger { background: #c02639; color: white; }
 
+  /* Banners principales (fuera del wrap, ancho completo de pantalla) */
   .banners-container { width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; margin-top: 20px; margin-bottom: 20px; }
   .banner-item { width: 100%; position: relative; overflow: hidden; margin-bottom: 10px; cursor: pointer; background: #1a0a0e; }
   .banner-item img { width: 100%; height: auto; display: block; object-fit: cover; }
-  .banner-item.banner-small img { max-height: 400px; }
-  .banner-item.banner-compact img { max-height: 500px; }
-  .banner-item.banner-standard img { max-height: 540px; }
-  .banner-item.banner-tall img { max-height: 600px; }
-  .banner-item.banner-extra img { max-height: 700px; }
-  .banner-item.banner-square-800 img { max-height: 800px; }
-  .banner-item.banner-square-1200 img { max-height: 1200px; }
-  .banner-item.banner-square-1920 img { max-height: 1920px; }
+  
+  /* CORREGIDO: Banners inline (dentro del wrap, ancho controlado) */
+  .inline-banner-container {
+    width: 100%;
+    margin: 40px 0;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    background: #1a0a0e;
+  }
+  .inline-banner-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* Tamaños de banners */
+  .banner-item.banner-small img, .inline-banner-container.banner-small img { max-height: 400px; }
+  .banner-item.banner-compact img, .inline-banner-container.banner-compact img { max-height: 500px; }
+  .banner-item.banner-standard img, .inline-banner-container.banner-standard img { max-height: 540px; }
+  .banner-item.banner-tall img, .inline-banner-container.banner-tall img { max-height: 600px; }
+  .banner-item.banner-extra img, .inline-banner-container.banner-extra img { max-height: 700px; }
+  .banner-item.banner-square-800 img, .inline-banner-container.banner-square-800 img { max-height: 800px; }
+  .banner-item.banner-square-1200 img, .inline-banner-container.banner-square-1200 img { max-height: 1200px; }
+  .banner-item.banner-square-1920 img, .inline-banner-container.banner-square-1920 img { max-height: 1920px; }
+
   .banner-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 30px 40px; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 60%, transparent 100%); color: white; pointer-events: none; }
   .banner-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700; margin-bottom: 8px; text-shadow: 2px 2px 8px rgba(0,0,0,0.5); letter-spacing: 1px; }
   .banner-subtitle { font-size: clamp(0.9rem, 2vw, 1.2rem); font-weight: 400; text-shadow: 1px 1px 4px rgba(0,0,0,0.5); opacity: 0.95; }
+  
   .banner-admin { position: absolute; top: 15px; right: 15px; display: none; gap: 8px; z-index: 5; }
   .admin-on .banner-admin { display: flex; }
   .banner-admin .btn { padding: 8px 16px; font-size: 0.85rem; background: rgba(255,255,255,0.95); color: var(--ink); backdrop-filter: blur(8px); }
@@ -50,12 +73,14 @@
   .videos-section h2 { color: var(--accent); }
   .category-section h2 { color: var(--accent2); }
   .offers-section h2 { color: #c02639; margin: 20px 0 40px; }
+  
   .videos-section h2::before, .videos-section h2::after, .category-section h2::before, .category-section h2::after, .offers-section h2::before, .offers-section h2::after {
     content: ''; flex: 1; max-width: 120px; height: 2px; min-width: 30px;
   }
   .videos-section h2::before, .videos-section h2::after { background: linear-gradient(90deg, transparent, var(--accent), transparent); }
   .category-section h2::before, .category-section h2::after { background: linear-gradient(90deg, transparent, var(--accent2), transparent); }
   .offers-section h2::before, .offers-section h2::after { background: linear-gradient(90deg, transparent, #c02639, transparent); }
+  
   .videos-section h2 > .cat-ornament, .category-section h2 > .cat-ornament, .offers-section h2 > .cat-ornament {
     display: block; width: 100%; text-align: center; font-size: 1.2rem; color: var(--accent); margin-top: 4px; letter-spacing: 8px; opacity: 0.8;
   }
@@ -70,6 +95,7 @@
 
   .videos-grid, .offers-grid, .products { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
   .video-card, .product { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+  
   .video-media, .product-media {
     width: 100%; height: 300px; background: #1a0a0e; position: relative; cursor: zoom-in;
     transition: transform 0.3s ease; display: flex; align-items: center; justify-content: center; overflow: hidden;
@@ -77,6 +103,7 @@
   .video-media:hover, .product-media:hover { transform: scale(1.02); }
   .video-media .video-thumb, .product-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .product-media img { object-fit: contain; }
+  
   .video-media::after, .product-media::after {
     content: '▶️ Ver'; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(159, 18, 57, 0.75);
     color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.1rem;
@@ -84,9 +111,12 @@
   }
   .product-media::after { content: '🔍 Ver fotos'; }
   .video-media:hover::after, .product-media:hover::after { opacity: 1; }
+  
   .video-body, .product-body { padding: 18px; }
   .video-title, .product-title { font-size: 1.25rem; margin-bottom: 8px; font-weight: 700; }
+  .product-code { font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; font-weight: 600; letter-spacing: 0.5px; }
   .video-desc, .product-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 12px; }
+  
   .video-admin { display: none; gap: 8px; margin-top: 10px; }
   .admin-on .video-admin { display: flex; }
   .video-admin .btn { flex: 1; font-size: 0.9rem; padding: 8px; }
@@ -99,6 +129,7 @@
   .stock-badge { position: absolute; top: 12px; right: 12px; padding: 6px 12px; border-radius: 30px; font-size: 0.8rem; z-index: 2; }
   .stock-ok { background: #166534; color: white; }
   .stock-none { background: #991b1b; color: white; }
+  
   .price { font-size: 1.35rem; font-weight: 700; color: var(--accent); display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
   .price-original { text-decoration: line-through; color: var(--muted); font-size: 0.95rem; font-weight: 400; }
   .price-offer { color: var(--accent2); font-weight: 700; }
@@ -129,6 +160,7 @@
     backdrop-filter: blur(3px); z-index: 250; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
   }
   .cart-overlay.active { opacity: 1; pointer-events: all; }
+  
   .cart-header { padding: 20px; border-bottom: 1px solid #ddd; background: linear-gradient(135deg, rgba(159,18,57,0.04), rgba(190,24,93,0.06)); position: relative; }
   .cart-close-btn {
     position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border: none; background: rgba(159, 18, 57, 0.1);
@@ -137,6 +169,7 @@
   }
   .cart-close-btn:hover { background: var(--accent); color: white; transform: rotate(90deg); }
   .cart-header h2 { font-size: 1.3rem; margin-bottom: 12px; color: var(--ink); text-align: center; padding-right: 30px; }
+  
   .cart-identifier-group { position: relative; }
   .cart-identifier-label { display: block; font-size: 0.9rem; color: var(--accent); font-weight: 700; margin-bottom: 6px; text-align: center; }
   .cart-identifier-input {
@@ -148,12 +181,14 @@
   .cart-identifier-warning { display: block; font-size: 0.72rem; color: #c02639; font-weight: 600; margin-top: 5px; text-align: center; line-height: 1.3; }
   .cart-identifier-input.error { border-color: #c02639; background: #fff5f5; animation: shake 0.4s; }
   @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+  
   .cart-items-container { flex: 1; padding: 15px 20px; overflow-y: auto; }
   .cart-item { margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #eee; }
   .cart-item-main { display: flex; gap: 15px; flex-wrap: wrap; }
   .cart-item-img { width: 85px; height: 85px; object-fit: cover; border-radius: 12px; flex-shrink: 0; }
   .cart-item-info { flex: 1; min-width: 150px; }
   .cart-item-summary { text-align: right; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; min-width: 80px; }
+  
   .cart-item-notes { margin-top: 10px; position: relative; }
   .cart-notes-toggle {
     background: none; border: none; color: var(--accent); font-size: 0.85rem; font-weight: 600;
@@ -167,6 +202,7 @@
   .cart-notes-input:focus { outline: none; border-color: var(--accent); border-style: solid; background: white; }
   .cart-notes-input::placeholder { color: var(--muted); font-style: italic; font-size: 0.82rem; }
   .cart-notes-saved { color: #166534; font-size: 0.8rem; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+  
   .cart-footer { padding: 20px; border-top: 1px solid #ddd; position: sticky; bottom: 0; background: white; box-shadow: 0 -4px 12px rgba(0,0,0,0.05); }
 
   #mediaModal { width: 100%; max-width: 95vw; background: transparent; border: none; padding: 0; margin: auto; }
@@ -187,6 +223,7 @@
   .lightbox-nav:hover { background: var(--accent); transform: translateY(-50%) scale(1.1); }
   .lightbox-prev { left: 15px; }
   .lightbox-next { right: 15px; }
+  
   .lightbox-frame {
     max-width: 92vw; max-height: 82vh; width: auto; height: auto; background: #1a0a0e; border-radius: 12px;
     overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 20px 60px rgba(0,0,0,0.6); position: relative;
@@ -194,6 +231,7 @@
   .lightbox-frame img { max-width: 92vw; max-height: 82vh; width: auto; height: auto; object-fit: contain; border: none; display: block; background: #1a0a0e; }
   .lightbox-frame iframe { width: min(800px, 92vw); aspect-ratio: 16 / 9; border: none; background: #000; }
   .lightbox-frame video { max-width: 92vw; max-height: 82vh; width: auto; height: auto; border: none; background: #000; }
+  
   .media-fallback {
     width: min(600px, 90vw); min-height: 400px; display: flex; flex-direction: column; align-items: center;
     justify-content: center; text-align: center; color: white; padding: 30px;
@@ -223,6 +261,7 @@
     width: 90%; max-width: 550px; border: none; border-radius: 20px; padding: 0; background: white; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   }
   #adminLoginModal::backdrop, #bannerDialog::backdrop, #customSectionDialog::backdrop { background: rgba(34, 22, 26, 0.8); backdrop-filter: blur(8px); }
+  
   .login-container { padding: 30px; text-align: center; }
   .login-icon { font-size: 3rem; margin-bottom: 10px; }
   .login-title { font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
@@ -246,14 +285,6 @@
     .lightbox-prev { left: 8px; }
     .lightbox-next { right: 8px; }
     .banner-overlay { padding: 20px; }
-    .banner-item.banner-small img { max-height: 220px; }
-    .banner-item.banner-compact img { max-height: 280px; }
-    .banner-item.banner-standard img { max-height: 320px; }
-    .banner-item.banner-tall img { max-height: 380px; }
-    .banner-item.banner-extra img { max-height: 450px; }
-    .banner-item.banner-square-800 img { max-height: 400px; }
-    .banner-item.banner-square-1200 img { max-height: 500px; }
-    .banner-item.banner-square-1920 img { max-height: 600px; }
   }
   @media (max-width: 480px) {
     .wrap { padding: 0 12px; }
@@ -288,14 +319,6 @@
     .cart-identifier-input { font-size: 16px; }
     .cart-identifier-warning { font-size: 0.68rem; }
     .banner-overlay { padding: 15px; }
-    .banner-item.banner-small img { max-height: 180px; }
-    .banner-item.banner-compact img { max-height: 240px; }
-    .banner-item.banner-standard img { max-height: 280px; }
-    .banner-item.banner-tall img { max-height: 340px; }
-    .banner-item.banner-extra img { max-height: 400px; }
-    .banner-item.banner-square-800 img { max-height: 350px; }
-    .banner-item.banner-square-1200 img { max-height: 450px; }
-    .banner-item.banner-square-1920 img { max-height: 550px; }
     .banner-admin { top: 10px; right: 10px; gap: 5px; }
     .banner-admin .btn { padding: 6px 12px; font-size: 0.75rem; }
   }
@@ -322,6 +345,7 @@
   </header>
 </div>
 
+<!-- Banners principales (fuera del wrap) -->
 <div class="banners-container" id="bannersContainer"></div>
 
 <div class="wrap">
@@ -378,6 +402,21 @@
         <input id="title" type="text" placeholder="Ej: Gel de Construcción" required style="width:100%; padding:12px; border: 1px solid #ddd; border-radius: 8px;">
       </div>
       
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+        <div>
+          <label style="font-size:0.85rem; font-weight:600; color:var(--accent); display:block; margin-bottom:4px;">🏷️ Código de Producto</label>
+          <input id="productCode" type="text" placeholder="Ej: PROD-001" style="width:100%; padding:12px; border: 1px solid #ddd; border-radius: 8px;">
+        </div>
+        <div>
+          <label style="font-size:0.85rem; font-weight:600; color:var(--accent); display:block; margin-bottom:4px;">📂 Categoría *</label>
+          <div class="category-wrapper">
+            <input id="category" type="text" placeholder="Ej: Uñas, Ropa" required list="categoryList" autocomplete="off" style="width:100%; padding:12px; border: 1px solid #ddd; border-radius: 8px;">
+            <span class="category-hint">💡 Sugerencias</span>
+          </div>
+          <datalist id="categoryList"></datalist>
+        </div>
+      </div>
+
       <div style="margin-bottom:12px;">
         <label style="font-size:0.85rem; font-weight:600; color:var(--accent); display:block; margin-bottom:4px;">🎨 Estilo de fuente</label>
         <select id="fontStyle" style="width:100%; padding:12px; border: 1px solid #ddd; border-radius: 8px;">
@@ -386,15 +425,6 @@
           <option value="font-style-3">Editorial</option>
           <option value="font-style-4">Fuerte</option>
         </select>
-      </div>
-
-      <div style="margin-bottom:12px;">
-        <label style="font-size:0.85rem; font-weight:600; color:var(--accent); display:block; margin-bottom:4px;">📂 Categoría *</label>
-        <div class="category-wrapper">
-          <input id="category" type="text" placeholder="Ej: Uñas, Ropa, Accesorios" required list="categoryList" autocomplete="off" style="width:100%; padding:12px; border: 1px solid #ddd; border-radius: 8px;">
-          <span class="category-hint">💡 Sugerencias</span>
-        </div>
-        <datalist id="categoryList"></datalist>
       </div>
 
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
@@ -841,7 +871,7 @@ function updateCategorySuggestions() {
 }
 
 // ================================================================
-// 🔥 RENDERIZAR PRODUCTOS Y BLOQUES EXTRA
+// 🔥 RENDERIZAR PRODUCTOS Y BLOQUES EXTRA (CORREGIDO)
 // ================================================================
 function renderProducts() {
   const container = document.getElementById('productsContainer');
@@ -877,6 +907,7 @@ function renderProducts() {
           </div>
           <div class="product-body">
             <h3 class="product-title">${p.title}</h3>
+            ${p.code ? `<p class="product-code">Cód: ${p.code}</p>` : ''}
             <p class="product-desc">${p.description || ''}</p>
             ${priceHtml}
             <button class="btn btn-primary" onclick="addToCart('${p.id}')" style="width:100%; margin-top:10px;" ${!inStock ? 'disabled' : ''}>${inStock ? 'Agregar al carrito' : 'Sin stock'}</button>
@@ -896,13 +927,12 @@ function renderProducts() {
       const hasLink = section.linkUrl && section.linkUrl.trim() !== '';
       const clickAction = hasLink ? `onclick="window.open('${section.linkUrl}', '_blank')"` : '';
       const bannerSize = section.size || 'banner-standard';
+      // CORREGIDO: Usamos inline-banner-container en lugar de banners-container para evitar el desborde 100vw
       return `
-        <div class="banners-container" style="margin: 40px 0;">
-          <div class="banner-item ${bannerSize}" ${clickAction}>
-            <img src="${imgUrl}" alt="${section.title || 'Banner'}" loading="lazy">
-            ${(hasTitle || hasSubtitle) ? `<div class="banner-overlay">${hasTitle ? `<div class="banner-title">${section.title}</div>` : ''}${hasSubtitle ? `<div class="banner-subtitle">${section.subtitle}</div>` : ''}</div>` : ''}
-            ${adminMode ? `<div class="banner-admin" style="top:15px; right:15px;"><button class="btn" onclick="event.stopPropagation(); editCustomSection('${section.id}')">✏️</button><button class="btn btn-danger" onclick="event.stopPropagation(); deleteCustomSection('${section.id}')">🗑️</button></div>` : ''}
-          </div>
+        <div class="inline-banner-container ${bannerSize}">
+          <img src="${imgUrl}" alt="${section.title || 'Banner'}" loading="lazy">
+          ${(hasTitle || hasSubtitle) ? `<div class="banner-overlay">${hasTitle ? `<div class="banner-title">${section.title}</div>` : ''}${hasSubtitle ? `<div class="banner-subtitle">${section.subtitle}</div>` : ''}</div>` : ''}
+          ${adminMode ? `<div class="banner-admin"><button class="btn" onclick="event.stopPropagation(); editCustomSection('${section.id}')">✏️</button><button class="btn btn-danger" onclick="event.stopPropagation(); deleteCustomSection('${section.id}')">🗑️</button></div>` : ''}
         </div>
       `;
     } else if (section.type === 'video') {
@@ -966,6 +996,7 @@ function renderOffers() {
         </div>
         <div class="product-body">
           <h3 class="product-title">${p.title}</h3>
+          ${p.code ? `<p class="product-code">Cód: ${p.code}</p>` : ''}
           <p class="product-desc">${p.description || ''}</p>
           <div class="price">
             <span class="price-original">${Number(p.price).toFixed(2)} Bs</span>
@@ -1203,6 +1234,7 @@ document.getElementById('productForm').addEventListener('submit', async function
   if (!adminMode) return;
   showSync('Guardando...', 'loading', 0);
   const productData = {
+    code: document.getElementById('productCode').value.trim(), // NUEVO: Código de producto
     title: document.getElementById('title').value.trim(),
     fontStyle: document.getElementById('fontStyle').value,
     category: document.getElementById('category').value.trim(),
@@ -1227,6 +1259,7 @@ function editProduct(id) {
   if (!product) return;
   editingId = id;
   document.getElementById('dialogTitle').textContent = "✏️ Editar Producto";
+  document.getElementById('productCode').value = product.code || ''; // NUEVO
   document.getElementById('title').value = product.title || '';
   document.getElementById('fontStyle').value = product.fontStyle || 'font-style-1';
   document.getElementById('category').value = product.category || '';
